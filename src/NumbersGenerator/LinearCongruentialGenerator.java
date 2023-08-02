@@ -10,7 +10,6 @@ public class LinearCongruentialGenerator {
         Stream<Long> randomStream = generateRandomStream(a, c, m);
         randomStream.limit(10).forEach(System.out::println);
     }
-
     public static Stream<Long> generateRandomStream(long a, long c, long m) {
 
         long seed = System.currentTimeMillis();
