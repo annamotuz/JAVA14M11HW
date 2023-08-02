@@ -1,22 +1,16 @@
 package NamesList;
+
 import java.util.List;
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class OddIndexNames {
     public static String getOddIndexNames(List<String> names) {
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < names.size(); i += 2) {
-            int position = i + 1;
-            String name = names.get(i);
-            result.append(position).append(". ").append(name).append(", ");
-        }
-
-        if (result.length() > 2) {
-            result.delete(result.length() - 2, result.length());
-        }
-
-        return result.toString();
+        return IntStream.range(0, names.size())
+                .filter(i -> i % 2 == 0)
+                .mapToObj(i -> (i + 1) + ". " + names.get(i))
+                .collect(Collectors.joining(", "));
     }
 
     public static void main(String[] args) {

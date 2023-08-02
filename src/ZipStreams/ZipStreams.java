@@ -1,5 +1,8 @@
 package ZipStreams;
+
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ZipStreams {
@@ -12,17 +15,23 @@ public class ZipStreams {
     }
 
     public static <T> Stream<T> zip(Stream<T> first, Stream<T> second) {
-        return zipHelper(first.iterator(), second.iterator());
+        List<T> list1 = first.collect(Collectors.toList());
+        List<T> list2 = second.collect(Collectors.toList());
+
+        return zipLists(list1, list2);
     }
 
-    private static <T> Stream<T> zipHelper(Iterator<T> first, Iterator<T> second) {
-        if (!first.hasNext() || !second.hasNext()) {
+    private static <T> Stream<T> zipLists(List<T> first, List<T> second) {
+        if (first.isEmpty() || second.isEmpty()) {
             return Stream.empty();
         }
 
-        T firstElement = first.next();
-        T secondElement = second.next();
+        T firstElement = first.get(0);
+        T secondElement = second.get(0);
 
-        return Stream.concat(Stream.of(firstElement, secondElement), zipHelper(first, second));
+        List<T> remaining1 = first.subList(1, first.size());
+        List<T> remaining2 = second.subList(1, second.size());
+
+        return Stream.concat(Stream.of(firstElement, secondElement), zipLists(remaining1, remaining2));
     }
 }
